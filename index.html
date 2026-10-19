@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Treino de Matemática</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  
+  <!-- Configurações para rodar como App no iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="MathFit">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2334C759'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='system-ui, -apple-system, sans-serif' font-weight='bold'%3E%C3%97%2B%3C/text%3E%3C/svg%3E">
+
+  <style>
+    :root {
+      --bg-color: #F2F2F7;
+      --card-bg: #FFFFFF;
+      --primary: #34C759;
+      --primary-dark: #28a745;
+      --primary-light: rgba(52, 199, 89, 0.12);
+      --success: #34C759;
+      --danger: #FF3B30;
+      --text-main: #1C1C1E;
+      --text-secondary: #8E8E93;
+      --border-color: #E5E5EA;
+      --key-bg: #FFFFFF;
+      --key-active: #D1D1D6;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      padding: env(safe-area-inset-top, 20px) 16px env(safe-area-inset-bottom, 20px) 16px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    /* ========================================== */
+    /* TELAS DE MENU E ESCOLHA                    */
+    /* ========================================== */
+    .screen-panel {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 0;
+    }
+
+    .menu-header {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .menu-icon-badge {
+      width: 60px;
+      height: 60px;
+      border-radius: 20px;
+      background: var(--primary-light);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .menu-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .menu-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .menu-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      cursor: pointer;
+      text-align: left;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      transition: all 0.15s ease;
+    }
+
+    .menu-btn:active {
+      transform: scale(0.97);
+      background: #FAFAFA;
+    }
+
+    .menu-btn-content {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .menu-btn-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: var(--primary-dark);
+    }
+
+    .menu-btn-text h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .menu-btn-text p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .menu-btn-arrow {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      padding-right: 4px;
+    }
+
+    .menu-footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+      padding-bottom: 6px;
+    }
+
+    /* ========================================== */
+    /* TELA DE JOGO / PRÁTICA                     */
+    /* ========================================== */
+    #screen-game {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      gap: 12px;
+    }
+
+    .game-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 0;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    .back-btn:active {
+      transform: scale(0.95);
+    }
+
+    .game-mode-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+    }
+
+    /* Seletor de Tabuada */
+    .table-selector-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 8px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .table-selector-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .table-selector-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .table-selector-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      background: var(--primary-light);
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    .table-chips {
+      display: flex;
+      overflow-x: auto;
+      gap: 6px;
+      padding: 4px 0;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .table-chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip-btn {
+      border: 1px solid var(--border-color);
+      background: #F9F9FB;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .chip-btn.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+      box-shadow: 0 2px 6px rgba(52, 199, 89, 0.3);
+    }
+
+    /* Placar */
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      background: var(--card-bg);
+      padding: 10px 16px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Cartão da Pergunta */
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      position: relative;
+      transition: transform 0.2s ease;
+      min-height: 130px;
+    }
+
+    .question {
+      font-size: 46px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 6px;
+    }
+
+    .answer-display {
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--primary);
+      min-height: 40px;
+      border-bottom: 3px solid var(--primary);
+      width: 120px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+
+    .answer-display.empty {
+      color: var(--text-secondary);
+      font-weight: 400;
+      border-bottom-color: var(--border-color);
+    }
+
+    .feedback-msg {
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 6px;
+      min-height: 18px;
+    }
+
+    /* Teclado Numérico (Modo Digitar) */
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: auto;
+      padding-bottom: 6px;
+    }
+
+    .key {
+      background: var(--key-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text-main);
+      padding: 13px 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      transition: background-color 0.1s, transform 0.05s;
+    }
+
+    .key:active {
+      background-color: var(--key-active);
+      transform: scale(0.96);
+    }
+
+    .key.action-confirm {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .key.action-confirm:active {
+      background-color: var(--primary-dark);
+    }
+
+    .key.action-clear {
+      font-size: 15px;
+      color: var(--danger);
+    }
+
+    /* Múltipla Escolha (4 Opções) */
+    .choices-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: auto;
+      padding-bottom: 6px;
+    }
+
+    .choice-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 18px 0;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+      transition: all 0.12s ease;
+    }
+
+    .choice-btn:active {
+      transform: scale(0.96);
+    }
+
+    .choice-btn.correct {
+      background-color: var(--primary) !important;
+      color: white !important;
+      border-color: var(--primary) !important;
+    }
+
+    .choice-btn.wrong {
+      background-color: var(--danger) !important;
+      color: white !important;
+      border-color: var(--danger) !important;
+    }
+
+    /* Animações */
+    .card.shake {
+      animation: shake 0.35s cubic-bezier(.36,.07,.19,.97) both;
+    }
+
+    .card.pulse-success {
+      animation: pulseGreen 0.3s ease;
+    }
+
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-3px, 0, 0); }
+      20%, 80% { transform: translate3d(5px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-5px, 0, 0); }
+      40%, 60% { transform: translate3d(5px, 0, 0); }
+    }
+
+    @keyframes pulseGreen {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- ========================================== -->
+    <!-- TELA 1: ESCOLHA DA OPERAÇÃO                -->
+    <!-- ========================================== -->
+    <div id="screen-menu" class="screen-panel">
+      <div class="menu-header">
+        <div class="menu-icon-badge">🧮</div>
+        <h1 class="menu-title">Treino de Matemática</h1>
+        <p class="menu-subtitle">Selecione uma operação para começar</p>
+      </div>
+
+      <div class="menu-options">
+        <div class="menu-btn" onclick="selectOperation('mult')">
+          <div class="menu-btn-content">
+            <div class="menu-btn-icon">✖️</div>
+            <div class="menu-btn-text">
+              <h3>Multiplicação</h3>
+              <p>Tabuadas do 1 ao 20</p>
+            </div>
+          </div>
+          <span class="menu-btn-arrow">›</span>
+        </div>
+
+        <div class="menu-btn" onclick="selectOperation('add')">
+          <div class="menu-btn-content">
+            <div class="menu-btn-icon">➕</div>
+            <div class="menu-btn-text">
+              <h3>Adição</h3>
+              <p>Cálculos de soma rápida</p>
+            </div>
+          </div>
+          <span class="menu-btn-arrow">›</span>
+        </div>
+
+        <div class="menu-btn" onclick="selectOperation('mix')">
+          <div class="menu-btn-content">
+            <div class="menu-btn-icon">🎲</div>
+            <div class="menu-btn-text">
+              <h3>Misto</h3>
+              <p>Multiplicações e somas juntas</p>
+            </div>
+          </div>
+          <span class="menu-btn-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="menu-footer">
+        Desenvolvido para treinar agilidade mental ⚡
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- TELA 2: ESCOLHA DO FORMATO DE RESPOSTA     -->
+    <!-- ========================================== -->
+    <div id="screen-format" class="screen-panel" style="display: none;">
+      <div>
+        <button class="back-btn" onclick="goToMenu()" style="margin-bottom: 12px;">‹ Operações</button>
+        <div class="menu-header" style="margin-top: 0;">
+          <span class="table-selector-badge" id="format-op-badge" style="display: inline-block; margin-bottom: 6px;">Multiplicação</span>
+          <h2 class="menu-title" style="font-size: 22px;">Como prefere responder?</h2>
+          <p class="menu-subtitle">Escolha a dinâmica do treino</p>
+        </div>
+      </div>
+
+      <div class="menu-options">
+        <div class="menu-btn" onclick="selectFormatAndStart('type')">
+          <div class="menu-btn-content">
+            <div class="menu-btn-icon">⌨️</div>
+            <div class="menu-btn-text">
+              <h3>Digitar a Resposta</h3>
+              <p>Use o teclado numérico na tela</p>
+            </div>
+          </div>
+          <span class="menu-btn-arrow">›</span>
+        </div>
+
+        <div class="menu-btn" onclick="selectFormatAndStart('choice')">
+          <div class="menu-btn-content">
+            <div class="menu-btn-icon">🔘</div>
+            <div class="menu-btn-text">
+              <h3>Múltipla Escolha</h3>
+              <p>Clique na certa entre 4 opções</p>
+            </div>
+          </div>
+          <span class="menu-btn-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="menu-footer">
+        Você pode alterar o formato a qualquer momento
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- TELA 3: ÁREA DE TREINO                     -->
+    <!-- ========================================== -->
+    <div id="screen-game">
+      <!-- Topo com botão voltar -->
+      <div class="game-top-bar">
+        <button class="back-btn" onclick="goToFormat()">‹ Modo</button>
+        <span class="game-mode-title" id="game-title">Multiplicação</span>
+        <div style="width: 50px;"></div>
+      </div>
+
+      <!-- Seletor de Tabuada Específica -->
+      <div class="table-selector-card" id="table-card">
+        <div class="table-selector-header">
+          <span class="table-selector-label">Escolha a tabuada:</span>
+          <span class="table-selector-badge" id="table-badge">Todas</span>
+        </div>
+        <div class="table-chips" id="table-chips"></div>
+      </div>
+
+      <!-- Placar -->
+      <div class="stats-row">
+        <div class="stat-item">
+          <span class="stat-label">Acertos</span>
+          <span class="stat-value" id="score">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Sequência</span>
+          <span class="stat-value" id="streak">🔥 0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Precisão</span>
+          <span class="stat-value" id="accuracy">100%</span>
+        </div>
+      </div>
+
+      <!-- Cartão da Pergunta -->
+      <div class="card" id="card">
+        <div class="question" id="question">7 × 8</div>
+        <div class="answer-display empty" id="type-answer-box">?</div>
+        <div class="feedback-msg" id="feedback"></div>
+      </div>
+
+      <!-- FORMATO 1: Teclado Numérico -->
+      <div class="keypad" id="keypad-container">
+        <button class="key" onclick="pressKey('1')">1</button>
+        <button class="key" onclick="pressKey('2')">2</button>
+        <button class="key" onclick="pressKey('3')">3</button>
+        
+        <button class="key" onclick="pressKey('4')">4</button>
+        <button class="key" onclick="pressKey('5')">5</button>
+        <button class="key" onclick="pressKey('6')">6</button>
+        
+        <button class="key" onclick="pressKey('7')">7</button>
+        <button class="key" onclick="pressKey('8')">8</button>
+        <button class="key" onclick="pressKey('9')">9</button>
+        
+        <button class="key action-clear" onclick="clearInput()">C</button>
+        <button class="key" onclick="pressKey('0')">0</button>
+        <button class="key action-confirm" onclick="checkTypedAnswer()">OK</button>
+      </div>
+
+      <!-- FORMATO 2: Múltipla Escolha (4 Opções) -->
+      <div class="choices-grid" id="choices-container" style="display: none;">
+        <button id="choice-0" class="choice-btn" onclick="chooseOption(0)">-</button>
+        <button id="choice-1" class="choice-btn" onclick="chooseOption(1)">-</button>
+        <button id="choice-2" class="choice-btn" onclick="chooseOption(2)">-</button>
+        <button id="choice-3" class="choice-btn" onclick="chooseOption(3)">-</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let audioCtx = null;
+    function playBeep(freq, type = 'sine', duration = 0.12) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function soundSuccess() {
+      playBeep(587, 'sine', 0.1);
+      setTimeout(() => playBeep(880, 'sine', 0.18), 90);
+    }
+
+    function soundError() {
+      playBeep(220, 'triangle', 0.25);
+    }
+
+    // Variáveis de Estado
+    let currentOp = 'mult';
+    let currentFormat = 'type';
+    let selectedTable = 'all';
+    let currentAnswer = 0;
+    let currentChoices = [];
+    let isLocked = false;
+    let userInput = '';
+    let score = 0;
+    let streak = 0;
+    let totalAttempts = 0;
+    let lastN1 = 0, lastN2 = 0;
+
+    // Telas
+    const screenMenu = document.getElementById('screen-menu');
+    const screenFormat = document.getElementById('screen-format');
+    const screenGame = document.getElementById('screen-game');
+    const gameTitle = document.getElementById('game-title');
+    const formatOpBadge = document.getElementById('format-op-badge');
+
+    // Elementos do Jogo
+    const questionEl = document.getElementById('question');
+    const typeAnswerBox = document.getElementById('type-answer-box');
+    const feedbackEl = document.getElementById('feedback');
+    const cardEl = document.getElementById('card');
+    const scoreEl = document.getElementById('score');
+    const streakEl = document.getElementById('streak');
+    const accuracyEl = document.getElementById('accuracy');
+    const tableCard = document.getElementById('table-card');
+    const tableBadge = document.getElementById('table-badge');
+    const tableChipsEl = document.getElementById('table-chips');
+    const keypadContainer = document.getElementById('keypad-container');
+    const choicesContainer = document.getElementById('choices-container');
+
+    function selectOperation(op) {
+      currentOp = op;
+      const opNames = { 'mult': 'Multiplicação', 'add': 'Adição', 'mix': 'Misto' };
+      formatOpBadge.textContent = opNames[op];
+      
+      screenMenu.style.display = 'none';
+      screenFormat.style.display = 'flex';
+    }
+
+    function goToMenu() {
+      screenFormat.style.display = 'none';
+      screenMenu.style.display = 'flex';
+    }
+
+    function selectFormatAndStart(format) {
+      currentFormat = format;
+      screenFormat.style.display = 'none';
+      screenGame.style.display = 'flex';
+
+      const opNames = { 'mult': 'Multiplicação', 'add': 'Adição', 'mix': 'Misto' };
+      const formatNames = { 'type': 'Digitar', 'choice': 'Múltipla Escolha' };
+      gameTitle.textContent = `${opNames[currentOp]} • ${formatNames[format]}`;
+
+      if (format === 'type') {
+        typeAnswerBox.style.display = 'block';
+        keypadContainer.style.display = 'grid';
+        choicesContainer.style.display = 'none';
+      } else {
+        typeAnswerBox.style.display = 'none';
+        keypadContainer.style.display = 'none';
+        choicesContainer.style.display = 'grid';
+      }
+
+      if (currentOp === 'add') {
+        tableCard.style.display = 'none';
+      } else {
+        tableCard.style.display = 'flex';
+      }
+
+      generateQuestion();
+    }
+
+    function goToFormat() {
+      screenGame.style.display = 'none';
+      screenFormat.style.display = 'flex';
+    }
+
+    function initTableChips() {
+      const options = ['all', ...Array.from({length: 20}, (_, i) => i + 1)];
+      tableChipsEl.innerHTML = '';
+
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.id = `chip-${opt}`;
+        btn.textContent = opt === 'all' ? 'Todas' : `×${opt}`;
+        btn.className = `chip-btn ${opt === selectedTable ? 'active' : ''}`;
+        btn.onclick = () => selectTable(opt);
+        tableChipsEl.appendChild(btn);
+      });
+    }
+
+    function selectTable(val) {
+      selectedTable = val;
+      tableBadge.textContent = val === 'all' ? 'Todas' : `Tabuada do ${val}`;
+
+      const options = ['all', ...Array.from({length: 20}, (_, i) => i + 1)];
+      options.forEach(opt => {
+        const btn = document.getElementById(`chip-${opt}`);
+        if (btn) btn.classList.toggle('active', opt === selectedTable);
+      });
+
+      const activeBtn = document.getElementById(`chip-${val}`);
+      if (activeBtn) {
+        activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+
+      generateQuestion();
+    }
+
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function generateQuestion() {
+      isLocked = false;
+      userInput = '';
+      updateDisplay();
+      feedbackEl.textContent = '';
+
+      let op = currentOp;
+      if (op === 'mix') {
+        op = Math.random() > 0.5 ? 'mult' : 'add';
+      }
+
+      if (op === 'mult') {
+        if (selectedTable === 'all') {
+          lastN1 = getRandomInt(2, 20);
+        } else {
+          lastN1 = parseInt(selectedTable, 10);
+        }
+        lastN2 = getRandomInt(1, 20);
+
+        if (Math.random() > 0.5 && selectedTable !== 'all') {
+          currentAnswer = lastN2 * lastN1;
+          questionEl.textContent = `${lastN2} × ${lastN1}`;
+        } else {
+          currentAnswer = lastN1 * lastN2;
+          questionEl.textContent = `${lastN1} × ${lastN2}`;
+        }
+      } else {
+        lastN1 = getRandomInt(5, 50);
+        lastN2 = getRandomInt(5, 50);
+        currentAnswer = lastN1 + lastN2;
+        questionEl.textContent = `${lastN1} + ${lastN2}`;
+      }
+
+      if (currentFormat === 'choice') {
+        setupChoices(currentAnswer);
+      }
+    }
+
+    function setupChoices(correct) {
+      const choicesSet = new Set([correct]);
+      
+      if (currentOp === 'mult' && lastN1 && lastN2) {
+        if (correct + lastN1 > 0) choicesSet.add(correct + lastN1);
+        if (correct - lastN1 > 0) choicesSet.add(correct - lastN1);
+        if (correct + lastN2 > 0) choicesSet.add(correct + lastN2);
+        if (correct - lastN2 > 0) choicesSet.add(correct - lastN2);
+      }
+
+      const offsets = [10, -10, 2, -2, 1, -1, 5, -5, 3, -3, 4, -4];
+      for (let off of offsets) {
+        if (choicesSet.size >= 4) break;
+        let c = correct + off;
+        if (c > 0 && c !== correct) choicesSet.add(c);
+      }
+
+      while (choicesSet.size < 4) {
+        let randOffset = (Math.floor(Math.random() * 8) + 1) * (Math.random() > 0.5 ? 1 : -1);
+        let c = Math.max(1, correct + randOffset);
+        choicesSet.add(c);
+      }
+
+      currentChoices = Array.from(choicesSet).slice(0, 4);
+      for (let i = currentChoices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [currentChoices[i], currentChoices[j]] = [currentChoices[j], currentChoices[i]];
+      }
+
+      for (let i = 0; i < 4; i++) {
+        const btn = document.getElementById(`choice-${i}`);
+        btn.textContent = currentChoices[i];
+        btn.className = "choice-btn";
+      }
+    }
+
+    function chooseOption(index) {
+      if (isLocked) return;
+      isLocked = true;
+      totalAttempts++;
+
+      const selectedVal = currentChoices[index];
+      const clickedBtn = document.getElementById(`choice-${index}`);
+
+      if (selectedVal === currentAnswer) {
+        score++;
+        streak++;
+        soundSuccess();
+        clickedBtn.classList.add('correct');
+        cardEl.classList.add('pulse-success');
+        feedbackEl.textContent = 'Mandou bem! ✨';
+        feedbackEl.style.color = 'var(--success)';
+
+        setTimeout(() => {
+          cardEl.classList.remove('pulse-success');
+          generateQuestion();
+        }, 550);
+      } else {
+        streak = 0;
+        soundError();
+        clickedBtn.classList.add('wrong');
+
+        for (let i = 0; i < 4; i++) {
+          if (currentChoices[i] === currentAnswer) {
+            document.getElementById(`choice-${i}`).classList.add('correct');
+          }
+        }
+
+        cardEl.classList.add('shake');
+        feedbackEl.textContent = `A resposta era ${currentAnswer} 😅`;
+        feedbackEl.style.color = 'var(--danger)';
+
+        setTimeout(() => {
+          cardEl.classList.remove('shake');
+          generateQuestion();
+        }, 1300);
+      }
+
+      updateStats();
+    }
+
+    function pressKey(char) {
+      if (isLocked || userInput.length >= 6) return;
+      userInput += char;
+      updateDisplay();
+    }
+
+    function clearInput() {
+      if (isLocked) return;
+      userInput = '';
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      if (userInput === '') {
+        typeAnswerBox.textContent = '?';
+        typeAnswerBox.classList.add('empty');
+      } else {
+        typeAnswerBox.textContent = userInput;
+        typeAnswerBox.classList.remove('empty');
+      }
+    }
+
+    function checkTypedAnswer() {
+      if (isLocked || !userInput) return;
+      isLocked = true;
+      totalAttempts++;
+
+      const val = parseInt(userInput, 10);
+
+      if (val === currentAnswer) {
+        score++;
+        streak++;
+        soundSuccess();
+        cardEl.classList.add('pulse-success');
+        feedbackEl.textContent = 'Mandou bem! ✨';
+        feedbackEl.style.color = 'var(--success)';
+        
+        setTimeout(() => {
+          cardEl.classList.remove('pulse-success');
+          generateQuestion();
+        }, 500);
+      } else {
+        streak = 0;
+        soundError();
+        cardEl.classList.add('shake');
+        feedbackEl.textContent = `Era ${currentAnswer} 😅`;
+        feedbackEl.style.color = 'var(--danger)';
+
+        setTimeout(() => {
+          cardEl.classList.remove('shake');
+          generateQuestion();
+        }, 1200);
+      }
+
+      updateStats();
+    }
+
+    function updateStats() {
+      scoreEl.textContent = score;
+      streakEl.textContent = `🔥 ${streak}`;
+      const acc = totalAttempts === 0 ? 100 : Math.round((score / totalAttempts) * 100);
+      accuracyEl.textContent = `${acc}%`;
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (screenGame.style.display === 'none') return;
+
+      if (currentFormat === 'type') {
+        if (e.key >= '0' && e.key <= '9') {
+          pressKey(e.key);
+        } else if (e.key === 'Backspace' || e.key === 'Escape') {
+          clearInput();
+        } else if (e.key === 'Enter') {
+          checkTypedAnswer();
+        }
+      } else if (currentFormat === 'choice') {
+        if (['1', '2', '3', '4'].includes(e.key)) {
+          chooseOption(parseInt(e.key, 10) - 1);
+        }
+      }
+    });
+
+    initTableChips();
+  </script>
+</body>
+</html>
