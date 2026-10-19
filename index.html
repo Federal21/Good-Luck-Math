@@ -3,10 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>Treino de Matemática</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Treine tabuada, somas e cálculo mental de forma rápida, com teclado numérico ou múltipla escolha.">
+  <meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
   
   <!-- Configurações para rodar como App no iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="MathFit">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2334C759'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='system-ui, -apple-system, sans-serif' font-weight='bold'%3E%C3%97%2B%3C/text%3E%3C/svg%3E">
@@ -25,6 +30,27 @@
       --border-color: #E5E5EA;
       --key-bg: #FFFFFF;
       --key-active: #D1D1D6;
+      --chip-bg: #F9F9FB;
+      --pressed-bg: #FAFAFA;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #000000;
+        --card-bg: #1C1C1E;
+        --primary: #30D158;
+        --primary-dark: #30D158;
+        --primary-light: rgba(48, 209, 88, 0.16);
+        --success: #30D158;
+        --danger: #FF453A;
+        --text-main: #FFFFFF;
+        --text-secondary: #98989F;
+        --border-color: #38383A;
+        --key-bg: #2C2C2E;
+        --key-active: #48484A;
+        --chip-bg: #2C2C2E;
+        --pressed-bg: #2C2C2E;
+      }
     }
 
     * {
@@ -33,6 +59,17 @@
       margin: 0;
       padding: 0;
       user-select: none;
+      -webkit-user-select: none;
+    }
+
+    button {
+      font-family: inherit;
+      touch-action: manipulation;
+    }
+
+    button:focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
     }
 
     body {
@@ -45,7 +82,8 @@
       justify-content: center;
       min-height: 100vh;
       min-height: -webkit-fill-available;
-      padding: env(safe-area-inset-top, 20px) 16px env(safe-area-inset-bottom, 20px) 16px;
+      min-height: 100dvh;
+      padding: max(env(safe-area-inset-top), 12px) 16px max(env(safe-area-inset-bottom), 12px) 16px;
     }
 
     .app-container {
@@ -106,6 +144,8 @@
     }
 
     .menu-btn {
+      width: 100%;
+      font: inherit;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -121,7 +161,7 @@
 
     .menu-btn:active {
       transform: scale(0.97);
-      background: #FAFAFA;
+      background: var(--pressed-bg);
     }
 
     .menu-btn-content {
@@ -159,6 +199,30 @@
       font-weight: 700;
       color: var(--primary);
       padding-right: 4px;
+    }
+
+    .menu-record {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      background: var(--primary-light);
+      padding: 6px 12px;
+      border-radius: 12px;
+    }
+
+    .icon-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      width: 50px;
+      padding: 6px 0;
+      font-size: 15px;
+      cursor: pointer;
+      color: var(--text-main);
     }
 
     .menu-footer {
@@ -210,6 +274,8 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: var(--text-main);
+      text-align: center;
+      padding: 0 8px;
     }
 
     /* Seletor de Tabuada */
@@ -259,7 +325,7 @@
 
     .chip-btn {
       border: 1px solid var(--border-color);
-      background: #F9F9FB;
+      background: var(--chip-bg);
       color: var(--text-secondary);
       font-size: 12px;
       font-weight: 600;
@@ -400,6 +466,10 @@
       color: var(--danger);
     }
 
+    .key:disabled {
+      opacity: 0.4;
+    }
+
     /* Múltipla Escolha (4 Opções) */
     .choices-grid {
       display: grid;
@@ -427,6 +497,10 @@
 
     .choice-btn:active {
       transform: scale(0.96);
+    }
+
+    .choice-btn:disabled {
+      cursor: default;
     }
 
     .choice-btn.correct {
@@ -462,6 +536,20 @@
       50% { transform: scale(1.03); }
       100% { transform: scale(1); }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media (max-height: 640px) {
+      .question { font-size: 38px; }
+      .card { min-height: 110px; padding: 12px 16px; }
+      .key { padding: 10px 0; }
+      .choice-btn { padding: 14px 0; }
+    }
   </style>
 </head>
 <body>
@@ -473,13 +561,14 @@
     <!-- ========================================== -->
     <div id="screen-menu" class="screen-panel">
       <div class="menu-header">
-        <div class="menu-icon-badge">🧮</div>
+        <div class="menu-icon-badge" aria-hidden="true">🧮</div>
         <h1 class="menu-title">Treino de Matemática</h1>
         <p class="menu-subtitle">Selecione uma operação para começar</p>
+        <div class="menu-record" id="menu-record" style="display: none;">🏆 Recorde de sequência: <span id="best-streak-menu">0</span></div>
       </div>
 
       <div class="menu-options">
-        <div class="menu-btn" onclick="selectOperation('mult')">
+        <button type="button" class="menu-btn" onclick="selectOperation('mult')">
           <div class="menu-btn-content">
             <div class="menu-btn-icon">✖️</div>
             <div class="menu-btn-text">
@@ -487,10 +576,10 @@
               <p>Tabuadas do 1 ao 20</p>
             </div>
           </div>
-          <span class="menu-btn-arrow">›</span>
-        </div>
+          <span class="menu-btn-arrow" aria-hidden="true">›</span>
+        </button>
 
-        <div class="menu-btn" onclick="selectOperation('add')">
+        <button type="button" class="menu-btn" onclick="selectOperation('add')">
           <div class="menu-btn-content">
             <div class="menu-btn-icon">➕</div>
             <div class="menu-btn-text">
@@ -498,10 +587,10 @@
               <p>Cálculos de soma rápida</p>
             </div>
           </div>
-          <span class="menu-btn-arrow">›</span>
-        </div>
+          <span class="menu-btn-arrow" aria-hidden="true">›</span>
+        </button>
 
-        <div class="menu-btn" onclick="selectOperation('mix')">
+        <button type="button" class="menu-btn" onclick="selectOperation('mix')">
           <div class="menu-btn-content">
             <div class="menu-btn-icon">🎲</div>
             <div class="menu-btn-text">
@@ -509,8 +598,8 @@
               <p>Multiplicações e somas juntas</p>
             </div>
           </div>
-          <span class="menu-btn-arrow">›</span>
-        </div>
+          <span class="menu-btn-arrow" aria-hidden="true">›</span>
+        </button>
       </div>
 
       <div class="menu-footer">
@@ -524,7 +613,7 @@
     <!-- ========================================== -->
     <div id="screen-format" class="screen-panel" style="display: none;">
       <div>
-        <button class="back-btn" onclick="goToMenu()" style="margin-bottom: 12px;">‹ Operações</button>
+        <button type="button" class="back-btn" onclick="goToMenu()" style="margin-bottom: 12px;">‹ Operações</button>
         <div class="menu-header" style="margin-top: 0;">
           <span class="table-selector-badge" id="format-op-badge" style="display: inline-block; margin-bottom: 6px;">Multiplicação</span>
           <h2 class="menu-title" style="font-size: 22px;">Como prefere responder?</h2>
@@ -533,7 +622,7 @@
       </div>
 
       <div class="menu-options">
-        <div class="menu-btn" onclick="selectFormatAndStart('type')">
+        <button type="button" class="menu-btn" onclick="selectFormatAndStart('type')">
           <div class="menu-btn-content">
             <div class="menu-btn-icon">⌨️</div>
             <div class="menu-btn-text">
@@ -541,10 +630,10 @@
               <p>Use o teclado numérico na tela</p>
             </div>
           </div>
-          <span class="menu-btn-arrow">›</span>
-        </div>
+          <span class="menu-btn-arrow" aria-hidden="true">›</span>
+        </button>
 
-        <div class="menu-btn" onclick="selectFormatAndStart('choice')">
+        <button type="button" class="menu-btn" onclick="selectFormatAndStart('choice')">
           <div class="menu-btn-content">
             <div class="menu-btn-icon">🔘</div>
             <div class="menu-btn-text">
@@ -552,8 +641,8 @@
               <p>Clique na certa entre 4 opções</p>
             </div>
           </div>
-          <span class="menu-btn-arrow">›</span>
-        </div>
+          <span class="menu-btn-arrow" aria-hidden="true">›</span>
+        </button>
       </div>
 
       <div class="menu-footer">
@@ -568,9 +657,9 @@
     <div id="screen-game">
       <!-- Topo com botão voltar -->
       <div class="game-top-bar">
-        <button class="back-btn" onclick="goToFormat()">‹ Modo</button>
+        <button type="button" class="back-btn" onclick="goToFormat()">‹ Modo</button>
         <span class="game-mode-title" id="game-title">Multiplicação</span>
-        <div style="width: 50px;"></div>
+        <button type="button" class="icon-btn" id="sound-btn" onclick="toggleSound()" aria-label="Desativar som">🔊</button>
       </div>
 
       <!-- Seletor de Tabuada Específica -->
@@ -593,6 +682,10 @@
           <span class="stat-value" id="streak">🔥 0</span>
         </div>
         <div class="stat-item">
+          <span class="stat-label">Recorde</span>
+          <span class="stat-value" id="best-streak">🏆 0</span>
+        </div>
+        <div class="stat-item">
           <span class="stat-label">Precisão</span>
           <span class="stat-value" id="accuracy">100%</span>
         </div>
@@ -600,44 +693,61 @@
 
       <!-- Cartão da Pergunta -->
       <div class="card" id="card">
-        <div class="question" id="question">7 × 8</div>
-        <div class="answer-display empty" id="type-answer-box">?</div>
-        <div class="feedback-msg" id="feedback"></div>
+        <div class="question" id="question" aria-live="polite">7 × 8</div>
+        <div class="answer-display empty" id="type-answer-box" aria-label="Sua resposta">?</div>
+        <div class="feedback-msg" id="feedback" role="status" aria-live="polite"></div>
       </div>
 
       <!-- FORMATO 1: Teclado Numérico -->
       <div class="keypad" id="keypad-container">
-        <button class="key" onclick="pressKey('1')">1</button>
-        <button class="key" onclick="pressKey('2')">2</button>
-        <button class="key" onclick="pressKey('3')">3</button>
+        <button type="button" class="key" onclick="pressKey('1')">1</button>
+        <button type="button" class="key" onclick="pressKey('2')">2</button>
+        <button type="button" class="key" onclick="pressKey('3')">3</button>
         
-        <button class="key" onclick="pressKey('4')">4</button>
-        <button class="key" onclick="pressKey('5')">5</button>
-        <button class="key" onclick="pressKey('6')">6</button>
+        <button type="button" class="key" onclick="pressKey('4')">4</button>
+        <button type="button" class="key" onclick="pressKey('5')">5</button>
+        <button type="button" class="key" onclick="pressKey('6')">6</button>
         
-        <button class="key" onclick="pressKey('7')">7</button>
-        <button class="key" onclick="pressKey('8')">8</button>
-        <button class="key" onclick="pressKey('9')">9</button>
+        <button type="button" class="key" onclick="pressKey('7')">7</button>
+        <button type="button" class="key" onclick="pressKey('8')">8</button>
+        <button type="button" class="key" onclick="pressKey('9')">9</button>
         
-        <button class="key action-clear" onclick="clearInput()">C</button>
-        <button class="key" onclick="pressKey('0')">0</button>
+        <button class="key action-clear" onclick="deleteDigit()" aria-label="Apagar">⌫</button>
+        <button type="button" class="key" onclick="pressKey('0')">0</button>
         <button class="key action-confirm" onclick="checkTypedAnswer()">OK</button>
       </div>
 
       <!-- FORMATO 2: Múltipla Escolha (4 Opções) -->
       <div class="choices-grid" id="choices-container" style="display: none;">
-        <button id="choice-0" class="choice-btn" onclick="chooseOption(0)">-</button>
-        <button id="choice-1" class="choice-btn" onclick="chooseOption(1)">-</button>
-        <button id="choice-2" class="choice-btn" onclick="chooseOption(2)">-</button>
-        <button id="choice-3" class="choice-btn" onclick="chooseOption(3)">-</button>
+        <button id="choice-0" type="button" class="choice-btn" onclick="chooseOption(0)">-</button>
+        <button id="choice-1" type="button" class="choice-btn" onclick="chooseOption(1)">-</button>
+        <button id="choice-2" type="button" class="choice-btn" onclick="chooseOption(2)">-</button>
+        <button id="choice-3" type="button" class="choice-btn" onclick="chooseOption(3)">-</button>
       </div>
     </div>
 
   </div>
 
   <script>
+    // Preferências salvas no aparelho
+    const storage = {
+      get(key, fallback) {
+        try {
+          const v = localStorage.getItem(key);
+          return v === null ? fallback : JSON.parse(v);
+        } catch (e) { return fallback; }
+      },
+      set(key, value) {
+        try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+      }
+    };
+
+    let soundOn = storage.get('mathfit.sound', true);
+    let bestStreak = storage.get('mathfit.bestStreak', 0);
+
     let audioCtx = null;
     function playBeep(freq, type = 'sine', duration = 0.12) {
+      if (!soundOn) return;
       try {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -661,11 +771,17 @@
 
     function soundError() {
       playBeep(220, 'triangle', 0.25);
+      if (navigator.vibrate) navigator.vibrate(80);
     }
 
     // Variáveis de Estado
+    const OP_NAMES = { 'mult': 'Multiplicação', 'add': 'Adição', 'mix': 'Misto' };
+    const FORMAT_NAMES = { 'type': 'Digitar', 'choice': 'Múltipla Escolha' };
+    const TABLE_OPTIONS = ['all', ...Array.from({length: 20}, (_, i) => i + 1)];
+
     let currentOp = 'mult';
     let currentFormat = 'type';
+    let questionOp = 'mult';
     let selectedTable = 'all';
     let currentAnswer = 0;
     let currentChoices = [];
@@ -675,6 +791,8 @@
     let streak = 0;
     let totalAttempts = 0;
     let lastN1 = 0, lastN2 = 0;
+    let lastQuestion = '';
+    let nextQuestionTimer = null;
 
     // Telas
     const screenMenu = document.getElementById('screen-menu');
@@ -682,6 +800,8 @@
     const screenGame = document.getElementById('screen-game');
     const gameTitle = document.getElementById('game-title');
     const formatOpBadge = document.getElementById('format-op-badge');
+    const menuRecord = document.getElementById('menu-record');
+    const bestStreakMenuEl = document.getElementById('best-streak-menu');
 
     // Elementos do Jogo
     const questionEl = document.getElementById('question');
@@ -690,35 +810,63 @@
     const cardEl = document.getElementById('card');
     const scoreEl = document.getElementById('score');
     const streakEl = document.getElementById('streak');
+    const bestStreakEl = document.getElementById('best-streak');
     const accuracyEl = document.getElementById('accuracy');
+    const soundBtn = document.getElementById('sound-btn');
     const tableCard = document.getElementById('table-card');
     const tableBadge = document.getElementById('table-badge');
     const tableChipsEl = document.getElementById('table-chips');
     const keypadContainer = document.getElementById('keypad-container');
     const choicesContainer = document.getElementById('choices-container');
+    const choiceBtns = [0, 1, 2, 3].map(i => document.getElementById(`choice-${i}`));
+
+    function showScreen(screen) {
+      [screenMenu, screenFormat, screenGame].forEach(el => {
+        el.style.display = el === screen ? 'flex' : 'none';
+      });
+    }
+
+    function cancelPendingQuestion() {
+      if (nextQuestionTimer) {
+        clearTimeout(nextQuestionTimer);
+        nextQuestionTimer = null;
+      }
+      cardEl.classList.remove('shake', 'pulse-success');
+    }
+
+    function scheduleNextQuestion(delay) {
+      cancelPendingQuestion();
+      nextQuestionTimer = setTimeout(() => {
+        nextQuestionTimer = null;
+        cardEl.classList.remove('shake', 'pulse-success');
+        generateQuestion();
+      }, delay);
+    }
 
     function selectOperation(op) {
       currentOp = op;
-      const opNames = { 'mult': 'Multiplicação', 'add': 'Adição', 'mix': 'Misto' };
-      formatOpBadge.textContent = opNames[op];
-      
-      screenMenu.style.display = 'none';
-      screenFormat.style.display = 'flex';
+      formatOpBadge.textContent = OP_NAMES[op];
+      showScreen(screenFormat);
     }
 
     function goToMenu() {
-      screenFormat.style.display = 'none';
-      screenMenu.style.display = 'flex';
+      updateMenuRecord();
+      showScreen(screenMenu);
+    }
+
+    function resetSession() {
+      score = 0;
+      streak = 0;
+      totalAttempts = 0;
+      lastQuestion = '';
+      updateStats();
     }
 
     function selectFormatAndStart(format) {
       currentFormat = format;
-      screenFormat.style.display = 'none';
-      screenGame.style.display = 'flex';
+      showScreen(screenGame);
 
-      const opNames = { 'mult': 'Multiplicação', 'add': 'Adição', 'mix': 'Misto' };
-      const formatNames = { 'type': 'Digitar', 'choice': 'Múltipla Escolha' };
-      gameTitle.textContent = `${opNames[currentOp]} • ${formatNames[format]}`;
+      gameTitle.textContent = `${OP_NAMES[currentOp]} • ${FORMAT_NAMES[format]}`;
 
       if (format === 'type') {
         typeAnswerBox.style.display = 'block';
@@ -730,29 +878,28 @@
         choicesContainer.style.display = 'grid';
       }
 
-      if (currentOp === 'add') {
-        tableCard.style.display = 'none';
-      } else {
-        tableCard.style.display = 'flex';
-      }
+      tableCard.style.display = currentOp === 'add' ? 'none' : 'flex';
 
+      resetSession();
       generateQuestion();
     }
 
     function goToFormat() {
-      screenGame.style.display = 'none';
-      screenFormat.style.display = 'flex';
+      cancelPendingQuestion();
+      isLocked = false;
+      showScreen(screenFormat);
     }
 
     function initTableChips() {
-      const options = ['all', ...Array.from({length: 20}, (_, i) => i + 1)];
       tableChipsEl.innerHTML = '';
 
-      options.forEach(opt => {
+      TABLE_OPTIONS.forEach(opt => {
         const btn = document.createElement('button');
+        btn.type = 'button';
         btn.id = `chip-${opt}`;
         btn.textContent = opt === 'all' ? 'Todas' : `×${opt}`;
         btn.className = `chip-btn ${opt === selectedTable ? 'active' : ''}`;
+        btn.setAttribute('aria-pressed', opt === selectedTable);
         btn.onclick = () => selectTable(opt);
         tableChipsEl.appendChild(btn);
       });
@@ -762,10 +909,12 @@
       selectedTable = val;
       tableBadge.textContent = val === 'all' ? 'Todas' : `Tabuada do ${val}`;
 
-      const options = ['all', ...Array.from({length: 20}, (_, i) => i + 1)];
-      options.forEach(opt => {
+      TABLE_OPTIONS.forEach(opt => {
         const btn = document.getElementById(`chip-${opt}`);
-        if (btn) btn.classList.toggle('active', opt === selectedTable);
+        if (btn) {
+          btn.classList.toggle('active', opt === selectedTable);
+          btn.setAttribute('aria-pressed', opt === selectedTable);
+        }
       });
 
       const activeBtn = document.getElementById(`chip-${val}`);
@@ -773,11 +922,31 @@
         activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       }
 
+      cancelPendingQuestion();
+      lastQuestion = '';
       generateQuestion();
     }
 
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function buildQuestion() {
+      questionOp = currentOp === 'mix' ? (Math.random() < 0.5 ? 'mult' : 'add') : currentOp;
+
+      if (questionOp === 'mult') {
+        const table = selectedTable === 'all' ? getRandomInt(2, 20) : selectedTable;
+        const other = getRandomInt(1, 20);
+        // Alterna a ordem dos fatores para fixar a comutatividade
+        [lastN1, lastN2] = Math.random() < 0.5 ? [table, other] : [other, table];
+        currentAnswer = lastN1 * lastN2;
+        return `${lastN1} × ${lastN2}`;
+      }
+
+      lastN1 = getRandomInt(5, 50);
+      lastN2 = getRandomInt(5, 50);
+      currentAnswer = lastN1 + lastN2;
+      return `${lastN1} + ${lastN2}`;
     }
 
     function generateQuestion() {
@@ -786,32 +955,13 @@
       updateDisplay();
       feedbackEl.textContent = '';
 
-      let op = currentOp;
-      if (op === 'mix') {
-        op = Math.random() > 0.5 ? 'mult' : 'add';
+      // Evita repetir a mesma conta duas vezes seguidas
+      let text = buildQuestion();
+      for (let tries = 0; text === lastQuestion && tries < 10; tries++) {
+        text = buildQuestion();
       }
-
-      if (op === 'mult') {
-        if (selectedTable === 'all') {
-          lastN1 = getRandomInt(2, 20);
-        } else {
-          lastN1 = parseInt(selectedTable, 10);
-        }
-        lastN2 = getRandomInt(1, 20);
-
-        if (Math.random() > 0.5 && selectedTable !== 'all') {
-          currentAnswer = lastN2 * lastN1;
-          questionEl.textContent = `${lastN2} × ${lastN1}`;
-        } else {
-          currentAnswer = lastN1 * lastN2;
-          questionEl.textContent = `${lastN1} × ${lastN2}`;
-        }
-      } else {
-        lastN1 = getRandomInt(5, 50);
-        lastN2 = getRandomInt(5, 50);
-        currentAnswer = lastN1 + lastN2;
-        questionEl.textContent = `${lastN1} + ${lastN2}`;
-      }
+      lastQuestion = text;
+      questionEl.textContent = text;
 
       if (currentFormat === 'choice') {
         setupChoices(currentAnswer);
@@ -819,89 +969,90 @@
     }
 
     function setupChoices(correct) {
+      const candidates = [];
+
+      if (questionOp === 'mult') {
+        // Erros típicos de tabuada: errar por um fator a mais/menos
+        candidates.push(correct + lastN1, correct - lastN1, correct + lastN2, correct - lastN2);
+      } else {
+        // Erros típicos de soma: dezena ou unidade trocada
+        candidates.push(correct + 10, correct - 10, correct + 1, correct - 1);
+      }
+      candidates.sort(() => Math.random() - 0.5);
+      candidates.push(...[10, -10, 2, -2, 1, -1, 5, -5, 3, -3, 4, -4].map(off => correct + off));
+
       const choicesSet = new Set([correct]);
-      
-      if (currentOp === 'mult' && lastN1 && lastN2) {
-        if (correct + lastN1 > 0) choicesSet.add(correct + lastN1);
-        if (correct - lastN1 > 0) choicesSet.add(correct - lastN1);
-        if (correct + lastN2 > 0) choicesSet.add(correct + lastN2);
-        if (correct - lastN2 > 0) choicesSet.add(correct - lastN2);
-      }
-
-      const offsets = [10, -10, 2, -2, 1, -1, 5, -5, 3, -3, 4, -4];
-      for (let off of offsets) {
+      for (const c of candidates) {
         if (choicesSet.size >= 4) break;
-        let c = correct + off;
-        if (c > 0 && c !== correct) choicesSet.add(c);
+        if (c > 0) choicesSet.add(c);
+      }
+      for (let off = 1; choicesSet.size < 4; off++) {
+        choicesSet.add(correct + off);
       }
 
-      while (choicesSet.size < 4) {
-        let randOffset = (Math.floor(Math.random() * 8) + 1) * (Math.random() > 0.5 ? 1 : -1);
-        let c = Math.max(1, correct + randOffset);
-        choicesSet.add(c);
-      }
-
-      currentChoices = Array.from(choicesSet).slice(0, 4);
+      currentChoices = Array.from(choicesSet);
       for (let i = currentChoices.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [currentChoices[i], currentChoices[j]] = [currentChoices[j], currentChoices[i]];
       }
 
-      for (let i = 0; i < 4; i++) {
-        const btn = document.getElementById(`choice-${i}`);
+      choiceBtns.forEach((btn, i) => {
         btn.textContent = currentChoices[i];
-        btn.className = "choice-btn";
+        btn.className = 'choice-btn';
+        btn.disabled = false;
+      });
+    }
+
+    function registerResult(isCorrect) {
+      totalAttempts++;
+      if (isCorrect) {
+        score++;
+        streak++;
+        if (streak > bestStreak) {
+          bestStreak = streak;
+          storage.set('mathfit.bestStreak', bestStreak);
+        }
+        soundSuccess();
+        cardEl.classList.add('pulse-success');
+        feedbackEl.textContent = streak > 0 && streak % 10 === 0
+          ? `${streak} seguidas! Imparável! 🚀`
+          : 'Mandou bem! ✨';
+        feedbackEl.style.color = 'var(--success)';
+      } else {
+        streak = 0;
+        soundError();
+        cardEl.classList.add('shake');
+        feedbackEl.textContent = `${questionEl.textContent} = ${currentAnswer} 😅`;
+        feedbackEl.style.color = 'var(--danger)';
       }
+      updateStats();
     }
 
     function chooseOption(index) {
       if (isLocked) return;
       isLocked = true;
-      totalAttempts++;
 
-      const selectedVal = currentChoices[index];
-      const clickedBtn = document.getElementById(`choice-${index}`);
+      const isCorrect = currentChoices[index] === currentAnswer;
+      choiceBtns.forEach((btn, i) => {
+        btn.disabled = true;
+        if (currentChoices[i] === currentAnswer) btn.classList.add('correct');
+      });
+      if (!isCorrect) choiceBtns[index].classList.add('wrong');
 
-      if (selectedVal === currentAnswer) {
-        score++;
-        streak++;
-        soundSuccess();
-        clickedBtn.classList.add('correct');
-        cardEl.classList.add('pulse-success');
-        feedbackEl.textContent = 'Mandou bem! ✨';
-        feedbackEl.style.color = 'var(--success)';
-
-        setTimeout(() => {
-          cardEl.classList.remove('pulse-success');
-          generateQuestion();
-        }, 550);
-      } else {
-        streak = 0;
-        soundError();
-        clickedBtn.classList.add('wrong');
-
-        for (let i = 0; i < 4; i++) {
-          if (currentChoices[i] === currentAnswer) {
-            document.getElementById(`choice-${i}`).classList.add('correct');
-          }
-        }
-
-        cardEl.classList.add('shake');
-        feedbackEl.textContent = `A resposta era ${currentAnswer} 😅`;
-        feedbackEl.style.color = 'var(--danger)';
-
-        setTimeout(() => {
-          cardEl.classList.remove('shake');
-          generateQuestion();
-        }, 1300);
-      }
-
-      updateStats();
+      registerResult(isCorrect);
+      scheduleNextQuestion(isCorrect ? 550 : 1400);
     }
 
     function pressKey(char) {
       if (isLocked || userInput.length >= 6) return;
+      if (userInput === '0') userInput = '';
       userInput += char;
+      updateDisplay();
+    }
+
+    function deleteDigit() {
+      if (isLocked) return;
+      userInput = userInput.slice(0, -1);
       updateDisplay();
     }
 
@@ -924,54 +1075,49 @@
     function checkTypedAnswer() {
       if (isLocked || !userInput) return;
       isLocked = true;
-      totalAttempts++;
 
-      const val = parseInt(userInput, 10);
-
-      if (val === currentAnswer) {
-        score++;
-        streak++;
-        soundSuccess();
-        cardEl.classList.add('pulse-success');
-        feedbackEl.textContent = 'Mandou bem! ✨';
-        feedbackEl.style.color = 'var(--success)';
-        
-        setTimeout(() => {
-          cardEl.classList.remove('pulse-success');
-          generateQuestion();
-        }, 500);
-      } else {
-        streak = 0;
-        soundError();
-        cardEl.classList.add('shake');
-        feedbackEl.textContent = `Era ${currentAnswer} 😅`;
-        feedbackEl.style.color = 'var(--danger)';
-
-        setTimeout(() => {
-          cardEl.classList.remove('shake');
-          generateQuestion();
-        }, 1200);
-      }
-
-      updateStats();
+      const isCorrect = parseInt(userInput, 10) === currentAnswer;
+      registerResult(isCorrect);
+      scheduleNextQuestion(isCorrect ? 500 : 1400);
     }
 
     function updateStats() {
       scoreEl.textContent = score;
       streakEl.textContent = `🔥 ${streak}`;
+      bestStreakEl.textContent = `🏆 ${bestStreak}`;
       const acc = totalAttempts === 0 ? 100 : Math.round((score / totalAttempts) * 100);
       accuracyEl.textContent = `${acc}%`;
     }
 
+    function updateMenuRecord() {
+      bestStreakMenuEl.textContent = bestStreak;
+      menuRecord.style.display = bestStreak > 0 ? 'inline-flex' : 'none';
+    }
+
+    function updateSoundBtn() {
+      soundBtn.textContent = soundOn ? '🔊' : '🔇';
+      soundBtn.setAttribute('aria-label', soundOn ? 'Desativar som' : 'Ativar som');
+    }
+
+    function toggleSound() {
+      soundOn = !soundOn;
+      storage.set('mathfit.sound', soundOn);
+      updateSoundBtn();
+    }
+
     window.addEventListener('keydown', (e) => {
-      if (screenGame.style.display === 'none') return;
+      if (screenGame.style.display !== 'flex' || e.ctrlKey || e.metaKey || e.altKey) return;
 
       if (currentFormat === 'type') {
         if (e.key >= '0' && e.key <= '9') {
           pressKey(e.key);
-        } else if (e.key === 'Backspace' || e.key === 'Escape') {
+        } else if (e.key === 'Backspace') {
+          e.preventDefault();
+          deleteDigit();
+        } else if (e.key === 'Escape') {
           clearInput();
         } else if (e.key === 'Enter') {
+          e.preventDefault();
           checkTypedAnswer();
         }
       } else if (currentFormat === 'choice') {
@@ -982,6 +1128,9 @@
     });
 
     initTableChips();
+    updateSoundBtn();
+    updateMenuRecord();
+    showScreen(screenMenu);
   </script>
 </body>
 </html>
