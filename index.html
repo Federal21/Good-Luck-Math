@@ -945,9 +945,15 @@
       });
     }
 
+    function getTableBadgeText(val) {
+      if (val === 'all') return 'Todas';
+      const num = parseInt(val, 10);
+      return num <= 10 ? `Tabuada do ${num} (até 10)` : `Tabuada do ${num} (até ${num}²)`;
+    }
+
     function selectTable(val) {
       selectedTable = val;
-      tableBadge.textContent = val === 'all' ? 'Todas' : `Tabuada do ${val}`;
+      tableBadge.textContent = getTableBadgeText(val);
 
       TABLE_OPTIONS.forEach(opt => {
         const btn = document.getElementById(`chip-${opt}`);
@@ -975,8 +981,10 @@
       questionOp = currentOp === 'mix' ? (Math.random() < 0.5 ? 'mult' : 'add') : currentOp;
 
       if (questionOp === 'mult') {
-        const table = selectedTable === 'all' ? getRandomInt(2, 20) : selectedTable;
-        const other = getRandomInt(1, 20);
+        const table = selectedTable === 'all' ? getRandomInt(2, 20) : parseInt(selectedTable, 10);
+        // Até a tabuada do 10 vai até × 10; acima do 10 sobe até o próprio número ao quadrado (ex: 11×11, 19×19)
+        const maxFactor = Math.max(10, table);
+        const other = getRandomInt(1, maxFactor);
         [lastN1, lastN2] = Math.random() < 0.5 ? [table, other] : [other, table];
         currentAnswer = lastN1 * lastN2;
         return `${lastN1} × ${lastN2}`;
